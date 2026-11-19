@@ -5,123 +5,176 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--ink:#18211f;--haze:#e3e8e4;--paper:#f3f5f2;--line:#c3cbc5;--band:#6aa56f;--mute:#56625e}
-@media(prefers-color-scheme:dark){:root{--ink:#e8ece9;--haze:#1b2321;--paper:#232d2a;--line:#3a4743;--mute:#9aa7a2}}
+:root{--ink:#18211f;--haze:#e3e8e4;--paper:#f3f5f2;--line:#c3cbc5;--band:#5f9e68;--mute:#4d5955}
+@media(prefers-color-scheme:dark){:root{--ink:#e8ece9;--haze:#1b2321;--paper:#232d2a;--line:#3a4743;--mute:#a3b0ab}}
 *{box-sizing:border-box}
-body{margin:0;font:17px/1.55 'Familjen Grotesk',system-ui,sans-serif;background:var(--haze);color:var(--ink)}
-main{max-width:860px;margin:0 auto;padding:28px 18px 60px}
-h1{font-size:clamp(28px,5vw,44px);line-height:1.1;margin:0 0 6px;letter-spacing:-.02em}
-h2{font-size:22px;margin:34px 0 10px}
-p.lead{color:var(--mute);margin:0 0 22px;max-width:60ch}
-form,.card{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:16px}
-.row{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:12px}
-input,select,button{font:inherit;color:inherit;border-radius:8px;border:1px solid var(--line);padding:9px 12px;background:var(--haze)}
-input[type=text]{flex:1;min-width:180px}
+body{margin:0;font:18px/1.55 'Familjen Grotesk',system-ui,sans-serif;background:var(--haze);color:var(--ink)}
+main{max-width:820px;margin:0 auto;padding:24px 16px 70px}
+h1{font-size:clamp(28px,6vw,42px);line-height:1.1;margin:0 0 8px;letter-spacing:-.02em}
+.lead{color:var(--mute);margin:0 0 18px}
+.card,form,details.card{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:16px}
+input,select,button{font:inherit;color:inherit;border-radius:10px;border:1px solid var(--line);padding:11px 14px;min-height:48px;background:var(--haze)}
 button{cursor:pointer;font-weight:600}
 button.go{background:var(--ink);color:var(--paper);border-color:var(--ink)}
-label.chk{display:flex;gap:6px;align-items:center;padding:6px 10px;border:1px solid var(--line);border-radius:999px;cursor:pointer}
-label.f{display:flex;flex-direction:column;font-size:14px;color:var(--mute);gap:3px}
+.row{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:12px}
+#city{flex:1;min-width:200px}
+.chk{display:flex;gap:8px;align-items:center;padding:8px 14px;min-height:48px;border:1px solid var(--line);border-radius:999px;cursor:pointer;background:var(--haze)}
+.chk input{min-height:0;width:20px;height:20px;accent-color:var(--ink)}
+.chk:has(input:checked){border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+label.f{display:flex;flex-direction:column;font-size:15px;color:var(--mute);gap:4px;flex:1;min-width:150px}
+summary{cursor:pointer;font-weight:700;min-height:32px}
 :focus-visible{outline:3px solid var(--band);outline-offset:2px}
-#out{display:none}
-.hero{border-left:10px solid var(--band);padding:6px 0 6px 18px;margin:28px 0 6px}
-.hero .big{font-size:clamp(26px,5vw,40px);font-weight:700;line-height:1.15}
-.cigs{display:flex;gap:6px;margin:14px 0 4px}
-.cig{width:14px;height:56px;border-radius:3px;border:1.5px solid var(--ink);background:linear-gradient(to top,var(--band) var(--f),transparent var(--f))}
-.meta{color:var(--mute);font-size:15px}
-.stats{display:flex;flex-wrap:wrap;gap:18px;margin-top:10px;font-size:15px}
-.stats b{font-size:20px;display:block}
-.item{padding:12px 0;border-top:1px solid var(--line)}.item:first-child{border-top:0}
-.item .t{font-weight:700}
-.impact{margin-top:4px;padding:6px 10px;border-radius:6px;background:var(--haze);font-size:15px}
-.impact::before{content:"Effect: ";font-weight:700}
-ul{padding-left:20px;margin:0}
 .err{color:#b3261e;font-weight:600;margin-top:10px}
-.tag{font-size:13px;color:var(--mute)}
-#chart{display:flex;align-items:flex-end;gap:2px;height:70px;margin-top:12px}
-#chart i{flex:1;background:var(--band);opacity:.8;border-radius:2px 2px 0 0;min-height:2px}
-@media(prefers-reduced-motion:no-preference){.hero{animation:in .5s ease-out}@keyframes in{from{opacity:0;transform:translateY(6px)}}}
+#out{display:none;margin-top:22px}
+.verdict{border:2px solid var(--band);border-left-width:14px;border-radius:12px;padding:16px 18px;background:var(--paper)}
+.verdict .v{font-size:clamp(24px,5vw,34px);font-weight:700;line-height:1.15}
+.verdict .city{color:var(--mute);font-size:15px}
+.cigs{display:flex;gap:6px;margin:12px 0 4px}
+.cig{width:13px;height:48px;border-radius:3px;border:1.5px solid var(--ink);background:linear-gradient(to top,var(--band) var(--f),transparent var(--f))}
+.meta{color:var(--mute);font-size:15px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px;font-size:14px;color:var(--mute)}
+.stats b{display:block;font-size:20px;color:var(--ink)}
+#chart{display:flex;align-items:flex-end;gap:2px;height:80px;margin-top:10px}
+#chart i{flex:1;background:var(--band);opacity:.55;border-radius:2px 2px 0 0;min-height:3px}
+#chart i.best{opacity:1;outline:2px solid var(--ink)}
+#axis{display:flex;justify-content:space-between;font-size:13px;color:var(--mute);margin-top:4px}
+.bar{display:flex;gap:12px;align-items:center;margin:20px 0 10px;flex-wrap:wrap}
+.prog{flex:1;min-width:140px;height:12px;border-radius:99px;background:var(--line);overflow:hidden}
+.prog i{display:block;height:100%;width:0;background:var(--band);transition:width .3s}
+[role=tablist]{display:flex;gap:6px;overflow-x:auto;margin-bottom:10px}
+[role=tab]{white-space:nowrap}
+[role=tab][aria-selected=true]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.item{display:flex;gap:12px;padding:14px 0;border-top:1px solid var(--line)}
+.item:first-child{border-top:0}
+.item input{min-height:0;width:26px;height:26px;margin-top:2px;flex:none;accent-color:var(--ink)}
+.item .t{font-weight:700}
+.item.done .t{text-decoration:line-through;opacity:.6}
+.impact{margin-top:6px;padding:8px 12px;border-radius:8px;background:var(--haze);font-size:16px}
+.impact b{font-weight:700}
+.item details{font-size:15px;color:var(--mute);margin-top:4px}
+ul.plain{margin:0;padding-left:20px}ul.plain li{margin:8px 0}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.chips button{font-weight:400;font-size:15px;min-height:40px;padding:6px 12px}
+.tag{font-size:14px;color:var(--mute)}
+.skel{height:90px;border-radius:12px;background:var(--line);opacity:.5;margin-top:22px;display:none}
+.busy .skel{display:block}
+@media(prefers-reduced-motion:no-preference){.busy .skel{animation:p 1s infinite alternate}@keyframes p{to{opacity:.2}}}
+@media(max-width:520px){.stats{grid-template-columns:repeat(2,1fr)}}
 </style></head><body><main>
 <h1>What is your air asking of you today?</h1>
-<p class="lead">Live air data for your city, turned into a day plan for your household, with the effect of each choice spelled out.</p>
+<p class="lead">Type your city. Get a simple plan for your family, and see what each choice does.</p>
 
 <form id="f">
- <div class="row"><input id="city" type="text" placeholder="City, e.g. Delhi" aria-label="City" value="Delhi">
-  <button type="button" id="geo">Use my location</button></div>
- <div class="row">
-  <label class="chk"><input type="checkbox" name="kids">Children</label>
-  <label class="chk"><input type="checkbox" name="elderly">Older adults</label>
-  <label class="chk"><input type="checkbox" name="respiratory">Asthma or lung condition</label>
-  <label class="chk"><input type="checkbox" name="pregnant">Pregnancy</label></div>
- <div class="row">
-  <label class="f">Commute<select name="commute"><option>two-wheeler</option><option>car</option><option>public transit</option><option>walk or cycle</option><option>work from home</option></select></label>
-  <label class="f">Winter heating<select name="heating"><option>electric</option><option>wood, coal or charcoal</option><option>gas</option><option>none</option></select></label>
-  <label class="f">Cooking<select name="cooking"><option>LPG</option><option>induction</option><option>wood or biomass</option></select></label>
-  <label class="f">Air purifier<select name="purifier"><option>none</option><option>yes</option></select></label></div>
- <button class="go" type="submit">Build my plan</button>
+ <div class="row"><input id="city" type="text" placeholder="Your city, e.g. Delhi" aria-label="Your city" autocomplete="address-level2">
+  <button type="button" id="geo">Use my location</button>
+  <select id="lang" aria-label="Plan language"><option value="en">English</option><option value="hi">हिन्दी</option></select></div>
+ <details class="card" id="pers" open><summary>Personalise for your household (optional)</summary>
+  <p class="tag">Who is at home?</p>
+  <div class="row">
+   <label class="chk"><input type="checkbox" name="kids">Children</label>
+   <label class="chk"><input type="checkbox" name="elderly">Older adults</label>
+   <label class="chk"><input type="checkbox" name="respiratory">Asthma or lung condition</label>
+   <label class="chk"><input type="checkbox" name="pregnant">Pregnancy</label></div>
+  <div class="row">
+   <label class="f">How do you travel?<select name="commute"><option>two-wheeler</option><option>car</option><option>public transit</option><option>walk or cycle</option><option>work from home</option></select></label>
+   <label class="f">How do you stay warm?<select name="heating"><option>electric</option><option>wood, coal or charcoal</option><option>gas</option><option>none</option></select></label>
+   <label class="f">How do you cook?<select name="cooking"><option>LPG</option><option>induction</option><option>wood or biomass</option></select></label>
+   <label class="f">Air purifier at home?<select name="purifier"><option value="none">No</option><option value="yes">Yes</option></select></label></div>
+ </details>
+ <div class="row" style="margin:14px 0 0"><button class="go" type="submit" id="go">Show my plan</button></div>
  <div id="err" class="err" role="alert"></div>
 </form>
+<div class="skel" aria-hidden="true"></div>
 
 <section id="out" aria-live="polite">
- <div class="hero" id="hero"></div>
- <div class="card"><div class="tag">Fine particles (PM2.5), next 24 hours</div><div id="chart"></div>
+ <div class="verdict" id="verdict"></div>
+ <div class="card" style="margin-top:14px"><b>Best time to go out</b>
+  <div id="chart" aria-hidden="true"></div><div id="axis" aria-hidden="true"></div>
   <div class="meta" id="win"></div></div>
- <h2>Your day</h2><div class="card" id="routine"></div>
- <h2>Inside your home</h2><div class="card" id="indoor"></div>
- <h2>Smarter swaps</h2><div class="card" id="swaps"></div>
- <h2>Protect the most vulnerable</h2><div class="card"><ul id="protect"></ul></div>
- <h2>With your neighbours</h2><div class="card"><ul id="community"></ul></div>
- <h2>Ask a follow-up</h2>
- <div class="card"><div class="row"><input id="q" type="text" placeholder="Can my child play outside at 4 pm?" aria-label="Question"><button id="ask" class="go">Ask</button></div><div id="ans"></div></div>
+
+ <div class="bar"><b>Your plan</b><div class="prog" aria-hidden="true"><i id="pbar"></i></div><span id="ptxt" class="tag"></span>
+  <button id="share" type="button">Share with family</button></div>
+ <div role="tablist" aria-label="Plan sections">
+  <button role="tab" id="t0" aria-selected="true" aria-controls="p">Today</button>
+  <button role="tab" id="t1" aria-selected="false" aria-controls="p">At home</button>
+  <button role="tab" id="t2" aria-selected="false" aria-controls="p">Swaps</button>
+  <button role="tab" id="t3" aria-selected="false" aria-controls="p">Protect</button></div>
+ <div class="card" id="p" role="tabpanel"></div>
+
+ <h2 style="font-size:20px;margin:26px 0 8px">Ask a question</h2>
+ <div class="card"><div class="chips" id="chips"></div>
+  <div class="row"><input id="q" type="text" style="flex:1;min-width:180px" placeholder="Type your question" aria-label="Question"><button id="ask" class="go" type="button">Ask</button></div><div id="ans" role="status"></div></div>
+ <details class="card" style="margin-top:18px"><summary>How this works</summary>
+  <p class="tag">Air readings come from Open-Meteo (US AQI scale, so numbers can differ from Indian CPCB figures). Advice is written by Google Gemini from your readings and answers, and checked against built-in safety rules. The cigarette comparison is a rough guide, not a medical measure. Read the <a href="/research.md">research behind this app</a>.</p></details>
  <p class="tag" id="src"></p>
- <p class="tag">Guidance is general, not medical advice. If anyone has breathing trouble, chest pain or worsening symptoms, see a doctor. Air data: Open-Meteo. Advice: Google Gemini.</p>
+ <p class="tag">General guidance, not medical advice. If anyone has trouble breathing, chest pain or worsening symptoms, see a doctor.</p>
 </section></main>
 <script>
 const $=s=>document.querySelector(s);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const bands=[[50,'#5f9e68','Good'],[100,'#b9a52a','Moderate'],[150,'#e08a2b','Unhealthy for sensitive groups'],[200,'#c8472f','Unhealthy'],[300,'#8a3a6b','Very unhealthy'],[1e9,'#6b2036','Hazardous']];
+const bands=[[50,'#5f9e68','Good','Air is clean. Enjoy time outdoors.'],[100,'#9a8a1c','Okay','Fine for most people. Sensitive people take care.'],[150,'#c9741a','Limit time outside','Children, older adults and people with lung conditions should stay in.'],[200,'#c8472f','Avoid outdoor exercise','Wear an N95 mask if you must go out.'],[300,'#8a3a6b','Stay indoors','Keep windows closed and use a clean-air room.'],[1e9,'#6b2036','Health emergency','Stay indoors in a sealed room. Avoid all outdoor activity.']];
 const band=a=>bands.find(b=>a<=b[0]);
-let air=null,ctx='';
-async function getJSON(u,o){const r=await fetch(u,o);const j=await r.json();if(!r.ok)throw new Error(j.error||'Something went wrong');return j}
 const hh=t=>t?t.slice(11,16):'';
+let air=null,plan=null,tab=0,ctx='';
+const store={get(k){try{return localStorage.getItem(k)}catch{return null}},set(k,v){try{localStorage.setItem(k,v)}catch{}}};
+async function getJSON(u,o){const r=await fetch(u,o);const j=await r.json();if(!r.ok)throw new Error(j.error||'Something went wrong. Try again.');return j}
+
 function renderAir(a){
-  const [,col,label]=band(a.aqi);document.documentElement.style.setProperty('--band',col);
-  const cig=a.pm2_5/22; // Berkeley Earth rule of thumb: 22 µg/m³ for 24h ≈ 1 cigarette
-  const n=Math.min(10,Math.ceil(cig)); let cigs='';
-  for(let i=0;i<n;i++){const f=Math.max(0,Math.min(1,cig-i));cigs+=`<div class="cig" style="--f:${f*100}%"></div>`}
-  $('#hero').innerHTML=`<div class="big">Breathing ${esc(a.city)} all day ≈ ${cig.toFixed(1)} cigarette${cig>=1.5?'s':''}</div>
-   <div class="cigs" aria-hidden="true">${cigs}</div>
-   <div class="meta">Rule of thumb: 22 µg/m³ of PM2.5 over 24 hours is roughly one cigarette of lung exposure. ${label}, US AQI ${a.aqi}.</div>
-   <div class="stats"><div><b>${Math.round(a.pm2_5)}</b>PM2.5 µg/m³</div><div><b>${Math.round(a.pm10)}</b>PM10</div><div><b>${Math.round(a.no2)}</b>NO₂</div><div><b>${Math.round(a.ozone)}</b>Ozone</div></div>`;
+  const [,col,title,tip]=band(a.aqi);document.documentElement.style.setProperty('--band',col);
+  const cig=a.pm2_5/22,n=Math.min(10,Math.ceil(cig));let c='';
+  for(let i=0;i<n;i++)c+=`<div class="cig" style="--f:${Math.max(0,Math.min(1,cig-i))*100}%"></div>`;
+  $('#verdict').innerHTML=`<div class="city">${esc(a.city)} right now</div><div class="v">${title}</div><div>${tip}</div>
+   <div class="cigs" aria-hidden="true">${c}</div>
+   <div class="meta">Breathing this air all day is roughly like smoking ${cig.toFixed(1)} cigarette${cig>=1.5?'s':''} (rough guide).</div>
+   <div class="stats"><div><b>${a.aqi}</b>Air score (AQI)</div><div><b>${Math.round(a.pm2_5)}</b>Fine dust PM2.5</div><div><b>${Math.round(a.pm10)}</b>Coarse dust PM10</div><div><b>${Math.round(a.no2)}</b>Traffic gas NO₂</div></div>`;
   const mx=Math.max(...a.forecast.map(h=>h.pm));
-  $('#chart').innerHTML=a.forecast.map(h=>`<i title="${hh(h.t)} – ${Math.round(h.pm)}" style="height:${h.pm/mx*100}%"></i>`).join('');
-  $('#win').textContent=`Cleanest around ${hh(a.cleanestHour)} (${Math.round(a.cleanestPm)} µg/m³). Worst around ${hh(a.dirtiestHour)} (${Math.round(a.dirtiestPm)}).`;
+  $('#chart').innerHTML=a.forecast.map(h=>`<i class="${h.t===a.cleanestHour?'best':''}" style="height:${h.pm/mx*100}%"></i>`).join('');
+  $('#axis').innerHTML=[0,6,12,18,23].filter(i=>a.forecast[i]).map(i=>`<span>${hh(a.forecast[i].t)}</span>`).join('');
+  $('#win').textContent=`Cleanest around ${hh(a.cleanestHour)} (outlined bar). Worst around ${hh(a.dirtiestHour)}.`;
 }
-const items=(arr,fn)=>(arr||[]).map(fn).join('');
-const imp=t=>t?`<div class="impact">${esc(t)}</div>`:'';
-function renderPlan(p){
-  $('#routine').innerHTML=items(p.routine,x=>`<div class="item"><div class="t">${esc(x.when)}: ${esc(x.action)}</div><div>${esc(x.why)}</div>${imp(x.impact)}</div>`);
-  $('#indoor').innerHTML=items(p.indoor,x=>`<div class="item"><div class="t">${esc(x.hack)} <span class="tag">(${esc(x.cost)})</span></div><div>${esc(x.why)}</div>${imp(x.impact)}</div>`);
-  $('#swaps').innerHTML=items(p.swaps,x=>`<div class="item"><div class="t">Instead of ${esc(x.instead_of)}, try ${esc(x.try)}</div>${imp(x.impact)}</div>`);
-  $('#protect').innerHTML=items(p.protect,x=>`<li>${esc(x)}</li>`);
-  $('#community').innerHTML=items(p.community,x=>`<li>${esc(x)}</li>`);
-  ctx=`${air.city}, AQI ${air.aqi}, PM2.5 ${Math.round(air.pm2_5)}. Cleanest ${hh(air.cleanestHour)}, worst ${hh(air.dirtiestHour)}. ${p.headline}`;
+const sections=()=>[
+ {k:'r',items:(plan.routine||[]).map(x=>({t:`${x.when}: ${x.action}`,e:x.impact,w:x.why}))},
+ {k:'i',items:(plan.indoor||[]).map(x=>({t:`${x.hack} (${x.cost})`,e:x.impact,w:x.why}))},
+ {k:'s',items:(plan.swaps||[]).map(x=>({t:`Instead of ${x.instead_of}, try ${x.try}`,e:x.impact}))}];
+const doneKey=t=>'done:'+new Date().toDateString()+':'+t;
+function progress(){let tot=0,d=0;sections().forEach(s=>s.items.forEach(i=>{tot++;if(store.get(doneKey(i.t)))d++}));
+  $('#pbar').style.width=(tot?d/tot*100:0)+'%';$('#ptxt').textContent=`${d} of ${tot} done`}
+function renderTab(){
+  document.querySelectorAll('[role=tab]').forEach((b,i)=>{b.setAttribute('aria-selected',i===tab);b.tabIndex=i===tab?0:-1});
+  const p=$('#p');p.setAttribute('aria-labelledby','t'+tab);
+  if(tab<3){
+    const s=sections()[tab];
+    p.innerHTML=s.items.map((i,n)=>`<div class="item${store.get(doneKey(i.t))?' done':''}"><input type="checkbox" id="c${n}" ${store.get(doneKey(i.t))?'checked':''} data-t="${esc(i.t)}" aria-label="Mark done"><div><label for="c${n}" class="t">${esc(i.t)}</label>${i.e?`<div class="impact"><b>What it does:</b> ${esc(i.e)}</div>`:''}${i.w?`<details><summary>Why?</summary>${esc(i.w)}</details>`:''}</div></div>`).join('');
+    p.querySelectorAll('input').forEach(c=>c.onchange=()=>{store.set(doneKey(c.dataset.t),c.checked?'1':'');c.closest('.item').classList.toggle('done',c.checked);progress()});
+  }else{
+    p.innerHTML=`<b>Protect the most vulnerable</b><ul class="plain">${(plan.protect||[]).map(x=>`<li>${esc(x)}</li>`).join('')}</ul><p></p><b>With your neighbours</b><ul class="plain">${(plan.community||[]).map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`;
+  }
 }
+document.querySelectorAll('[role=tab]').forEach((b,i)=>{b.onclick=()=>{tab=i;renderTab()};b.onkeydown=e=>{if(e.key==='ArrowRight'||e.key==='ArrowLeft'){tab=(tab+(e.key==='ArrowRight'?1:3))%4;renderTab();$('#t'+tab).focus()}}});
+
 async function run(query){
-  $('#err').textContent='';const btn=$('.go');btn.disabled=true;btn.textContent='Building…';
+  $('#err').textContent='';$('#go').disabled=true;$('#go').textContent='Getting live air data…';document.body.classList.add('busy');
   try{
     air=await getJSON('/api/air?'+query);renderAir(air);
-    const fd=new FormData($('#f'));const profile={};
+    const fd=new FormData($('#f')),profile={};
     ['kids','elderly','respiratory','pregnant'].forEach(k=>profile[k]=fd.has(k));
     ['commute','heating','cooking','purifier'].forEach(k=>profile[k]=fd.get(k));
-    const r=await getJSON('/api/plan',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({air,profile})});
-    renderPlan(r.plan);
-    $('#src').textContent=r.source==='gemini'?'Plan written by Gemini for your household.':'Plan from built-in rules (Gemini key not set on the server).';
-    $('#out').style.display='block';$('#hero').scrollIntoView({behavior:'smooth'});
+    const r=await getJSON('/api/plan',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({air,profile,lang:$('#lang').value})});
+    plan=r.plan;tab=0;renderTab();progress();
+    ctx=`${air.city}, AQI ${air.aqi}, PM2.5 ${Math.round(air.pm2_5)}. Cleanest ${hh(air.cleanestHour)}, worst ${hh(air.dirtiestHour)}. ${plan.headline||''}`;
+    $('#chips').innerHTML=['Can my child play outside today?','Is it safe to open windows?','Which mask should I buy?'].map(q=>`<button type="button">${q}</button>`).join('');
+    $('#chips').querySelectorAll('button').forEach(b=>b.onclick=()=>{$('#q').value=b.textContent;$('#ask').click()});
+    $('#src').textContent=r.source==='gemini'?'Plan written by Gemini for your household.':'Plan from built-in safety rules (Gemini is not connected).';
+    $('#out').style.display='block';$('#pers').open=false;store.set('city',$('#city').value);$('#verdict').scrollIntoView({behavior:'smooth'});
   }catch(e){$('#err').textContent=e.message}
-  btn.disabled=false;btn.textContent='Build my plan';
+  document.body.classList.remove('busy');$('#go').disabled=false;$('#go').textContent='Show my plan';
 }
-$('#f').addEventListener('submit',e=>{e.preventDefault();run('city='+encodeURIComponent($('#city').value.trim()))});
-$('#geo').onclick=()=>navigator.geolocation?navigator.geolocation.getCurrentPosition(p=>run(`lat=${p.coords.latitude}&lon=${p.coords.longitude}`),()=>{$('#err').textContent='Location blocked. Type your city instead.'}):($('#err').textContent='Location is not supported. Type your city instead.');
+$('#f').addEventListener('submit',e=>{e.preventDefault();const c=$('#city').value.trim();if(!c){$('#err').textContent='Type your city name, or use your location.';$('#city').focus();return}run('city='+encodeURIComponent(c))});
+$('#geo').onclick=()=>navigator.geolocation?navigator.geolocation.getCurrentPosition(p=>run(`lat=${p.coords.latitude}&lon=${p.coords.longitude}`),()=>{$('#err').textContent='Location is blocked. Type your city instead.'}):($('#err').textContent='Location is not available. Type your city instead.');
 $('#ask').onclick=async()=>{const q=$('#q').value.trim();if(!q)return;$('#ans').textContent='Thinking…';
-  try{const r=await getJSON('/api/ask',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({question:q,context:ctx})});$('#ans').textContent=r.answer}catch(e){$('#ans').textContent=e.message}};
+  try{const r=await getJSON('/api/ask',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({question:q,context:ctx,lang:$('#lang').value})});$('#ans').textContent=r.answer}catch(e){$('#ans').textContent=e.message}};
+$('#share').onclick=async()=>{
+  const text=`Air in ${air.city}: ${band(air.aqi)[2]} (AQI ${air.aqi}). Cleanest time to go out: ${hh(air.cleanestHour)}.\nToday:\n`+(plan.routine||[]).slice(0,3).map(x=>`- ${x.action}`).join('\n');
+  try{if(navigator.share)await navigator.share({text});else{await navigator.clipboard.writeText(text);$('#share').textContent='Copied'}}catch{}};
+const sc=store.get('city');if(sc)$('#city').value=sc;
 </script></body></html>

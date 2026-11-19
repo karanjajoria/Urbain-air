@@ -9,6 +9,8 @@ Falls back to built-in rules if no Gemini key is set, so the demo never breaks.
 - Google Fonts
 - Open-Meteo air quality + geocoding (free, no key). Google's Air Quality API needs a billing account, so it is not used.
 
+Research and design rationale: see RESEARCH.md (also served at /research.md).
+
 ## Run locally
     npm install
     GEMINI_API_KEY=your_key npm start     # http://localhost:8080

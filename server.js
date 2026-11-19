@@ -66,7 +66,7 @@ Given live air data and a household profile, return ONLY JSON:
 "swaps":[{"instead_of":string,"try":string,"impact":string}],
 "protect":[string],"community":[string]}
 Rules: 4-5 routine items ordered through the day, using the cleanest/dirtiest hours given. 4 indoor hacks (prefer free or under 500 INR). 3 swaps matching their commute/heating/cooking. 3 protect tips for vulnerable members. 2 community actions.
-Every "impact" must quantify or concretely explain the effect (e.g. "cuts your child's PM2.5 dose by roughly a third", "removes ~1 kg CO2 per trip") and be honest about uncertainty; never invent precise medical claims. Be tailored to the profile, practical, kind, no diagnoses. For asthma, heart disease or symptoms, advise seeing a doctor. Plain language, short sentences.`;
+Every "impact" must quantify or concretely explain the effect (e.g. "cuts your child's PM2.5 dose by roughly a third", "removes ~1 kg CO2 per trip") and be honest about uncertainty; never invent precise medical claims. Be tailored to the profile, practical, kind, no diagnoses. For asthma, heart disease or symptoms, advise seeing a doctor. Plain language, short sentences. Write every text value in the language named by respond_in.`;
 
 const clean = (v, n = 40) => String(v ?? '').slice(0, n);
 function rulePlan(air, p) {
@@ -101,7 +101,7 @@ app.post('/api/plan', async (req, res) => {
   const p = { kids: !!profile?.kids, elderly: !!profile?.elderly, respiratory: !!profile?.respiratory, pregnant: !!profile?.pregnant,
     commute: clean(profile?.commute), heating: clean(profile?.heating), cooking: clean(profile?.cooking), purifier: clean(profile?.purifier) };
   if (!KEY) return res.json({ source: 'rules', plan: rulePlan(a, p) });
-  try { res.json({ source: 'gemini', plan: await gemini(SYS, JSON.stringify({ air: a, profile: p }), true) }); }
+  try { res.json({ source: 'gemini', plan: await gemini(SYS, JSON.stringify({ air: a, profile: p, respond_in: req.body?.lang === 'hi' ? 'Hindi (Devanagari script)' : 'English' }), true) }); }
   catch { res.json({ source: 'rules', plan: rulePlan(a, p) }); }
 });
 
@@ -110,7 +110,7 @@ app.post('/api/ask', async (req, res) => {
   if (!q) return res.status(400).json({ error: 'Ask a question.' });
   if (!KEY) return res.json({ answer: 'Ask needs a Gemini API key on the server. See the README.' });
   try {
-    res.json({ answer: await gemini('You are a concise, practical urban air-quality coach. Answer in under 120 words, explain the effect of the suggested choice, and suggest a doctor for medical concerns.', `Context: ${c}\nQuestion: ${q}`, false) });
+    res.json({ answer: await gemini('You are a concise, practical urban air-quality coach. Answer in under 120 words, explain the effect of the suggested choice, and suggest a doctor for medical concerns.', `Respond in: ${req.body?.lang === 'hi' ? 'Hindi (Devanagari script)' : 'English'}\nContext: ${c}\nQuestion: ${q}`, false) });
   } catch { res.status(502).json({ error: 'The assistant is busy. Try again shortly.' }); }
 });
 
