@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Urban Air Assistant</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#18211f;--haze:#e3e8e4;--paper:#f3f5f2;--line:#c3cbc5;--band:#6aa56f;--mute:#56625e}
+@media(prefers-color-scheme:dark){:root{--ink:#e8ece9;--haze:#1b2321;--paper:#232d2a;--line:#3a4743;--mute:#9aa7a2}}
+*{box-sizing:border-box}
+body{margin:0;font:17px/1.55 'Familjen Grotesk',system-ui,sans-serif;background:var(--haze);color:var(--ink)}
+main{max-width:860px;margin:0 auto;padding:28px 18px 60px}
+h1{font-size:clamp(28px,5vw,44px);line-height:1.1;margin:0 0 6px;letter-spacing:-.02em}
+h2{font-size:22px;margin:34px 0 10px}
+p.lead{color:var(--mute);margin:0 0 22px;max-width:60ch}
+form,.card{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:16px}
+.row{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:12px}
+input,select,button{font:inherit;color:inherit;border-radius:8px;border:1px solid var(--line);padding:9px 12px;background:var(--haze)}
+input[type=text]{flex:1;min-width:180px}
+button{cursor:pointer;font-weight:600}
+button.go{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+label.chk{display:flex;gap:6px;align-items:center;padding:6px 10px;border:1px solid var(--line);border-radius:999px;cursor:pointer}
+label.f{display:flex;flex-direction:column;font-size:14px;color:var(--mute);gap:3px}
+:focus-visible{outline:3px solid var(--band);outline-offset:2px}
+#out{display:none}
+.hero{border-left:10px solid var(--band);padding:6px 0 6px 18px;margin:28px 0 6px}
+.hero .big{font-size:clamp(26px,5vw,40px);font-weight:700;line-height:1.15}
+.cigs{display:flex;gap:6px;margin:14px 0 4px}
+.cig{width:14px;height:56px;border-radius:3px;border:1.5px solid var(--ink);background:linear-gradient(to top,var(--band) var(--f),transparent var(--f))}
+.meta{color:var(--mute);font-size:15px}
+.stats{display:flex;flex-wrap:wrap;gap:18px;margin-top:10px;font-size:15px}
+.stats b{font-size:20px;display:block}
+.item{padding:12px 0;border-top:1px solid var(--line)}.item:first-child{border-top:0}
+.item .t{font-weight:700}
+.impact{margin-top:4px;padding:6px 10px;border-radius:6px;background:var(--haze);font-size:15px}
+.impact::before{content:"Effect: ";font-weight:700}
+ul{padding-left:20px;margin:0}
+.err{color:#b3261e;font-weight:600;margin-top:10px}
+.tag{font-size:13px;color:var(--mute)}
+#chart{display:flex;align-items:flex-end;gap:2px;height:70px;margin-top:12px}
+#chart i{flex:1;background:var(--band);opacity:.8;border-radius:2px 2px 0 0;min-height:2px}
+@media(prefers-reduced-motion:no-preference){.hero{animation:in .5s ease-out}@keyframes in{from{opacity:0;transform:translateY(6px)}}}
+</style></head><body><main>
+<h1>What is your air asking of you today?</h1>
+<p class="lead">Live air data for your city, turned into a day plan for your household, with the effect of each choice spelled out.</p>
+
+<form id="f">
+ <div class="row"><input id="city" type="text" placeholder="City, e.g. Delhi" aria-label="City" value="Delhi">
+  <button type="button" id="geo">Use my location</button></div>
+ <div class="row">
+  <label class="chk"><input type="checkbox" name="kids">Children</label>
+  <label class="chk"><input type="checkbox" name="elderly">Older adults</label>
+  <label class="chk"><input type="checkbox" name="respiratory">Asthma or lung condition</label>
+  <label class="chk"><input type="checkbox" name="pregnant">Pregnancy</label></div>
+ <div class="row">
+  <label class="f">Commute<select name="commute"><option>two-wheeler</option><option>car</option><option>public transit</option><option>walk or cycle</option><option>work from home</option></select></label>
+  <label class="f">Winter heating<select name="heating"><option>electric</option><option>wood, coal or charcoal</option><option>gas</option><option>none</option></select></label>
+  <label class="f">Cooking<select name="cooking"><option>LPG</option><option>induction</option><option>wood or biomass</option></select></label>
+  <label class="f">Air purifier<select name="purifier"><option>none</option><option>yes</option></select></label></div>
+ <button class="go" type="submit">Build my plan</button>
+ <div id="err" class="err" role="alert"></div>
+</form>
+
+<section id="out" aria-live="polite">
+ <div class="hero" id="hero"></div>
+ <div class="card"><div class="tag">Fine particles (PM2.5), next 24 hours</div><div id="chart"></div>
+  <div class="meta" id="win"></div></div>
+ <h2>Your day</h2><div class="card" id="routine"></div>
+ <h2>Inside your home</h2><div class="card" id="indoor"></div>
+ <h2>Smarter swaps</h2><div class="card" id="swaps"></div>
+ <h2>Protect the most vulnerable</h2><div class="card"><ul id="protect"></ul></div>
+ <h2>With your neighbours</h2><div class="card"><ul id="community"></ul></div>
+ <h2>Ask a follow-up</h2>
+ <div class="card"><div class="row"><input id="q" type="text" placeholder="Can my child play outside at 4 pm?" aria-label="Question"><button id="ask" class="go">Ask</button></div><div id="ans"></div></div>
+ <p class="tag" id="src"></p>
+ <p class="tag">Guidance is general, not medical advice. If anyone has breathing trouble, chest pain or worsening symptoms, see a doctor. Air data: Open-Meteo. Advice: Google Gemini.</p>
+</section></main>
+<script>
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const bands=[[50,'#5f9e68','Good'],[100,'#b9a52a','Moderate'],[150,'#e08a2b','Unhealthy for sensitive groups'],[200,'#c8472f','Unhealthy'],[300,'#8a3a6b','Very unhealthy'],[1e9,'#6b2036','Hazardous']];
+const band=a=>bands.find(b=>a<=b[0]);
+let air=null,ctx='';
+async function getJSON(u,o){const r=await fetch(u,o);const j=await r.json();if(!r.ok)throw new Error(j.error||'Something went wrong');return j}
+const hh=t=>t?t.slice(11,16):'';
+function renderAir(a){
+  const [,col,label]=band(a.aqi);document.documentElement.style.setProperty('--band',col);
+  const cig=a.pm2_5/22; // Berkeley Earth rule of thumb: 22 µg/m³ for 24h ≈ 1 cigarette
+  const n=Math.min(10,Math.ceil(cig)); let cigs='';
+  for(let i=0;i<n;i++){const f=Math.max(0,Math.min(1,cig-i));cigs+=`<div class="cig" style="--f:${f*100}%"></div>`}
+  $('#hero').innerHTML=`<div class="big">Breathing ${esc(a.city)} all day ≈ ${cig.toFixed(1)} cigarette${cig>=1.5?'s':''}</div>
+   <div class="cigs" aria-hidden="true">${cigs}</div>
+   <div class="meta">Rule of thumb: 22 µg/m³ of PM2.5 over 24 hours is roughly one cigarette of lung exposure. ${label}, US AQI ${a.aqi}.</div>
+   <div class="stats"><div><b>${Math.round(a.pm2_5)}</b>PM2.5 µg/m³</div><div><b>${Math.round(a.pm10)}</b>PM10</div><div><b>${Math.round(a.no2)}</b>NO₂</div><div><b>${Math.round(a.ozone)}</b>Ozone</div></div>`;
+  const mx=Math.max(...a.forecast.map(h=>h.pm));
+  $('#chart').innerHTML=a.forecast.map(h=>`<i title="${hh(h.t)} – ${Math.round(h.pm)}" style="height:${h.pm/mx*100}%"></i>`).join('');
+  $('#win').textContent=`Cleanest around ${hh(a.cleanestHour)} (${Math.round(a.cleanestPm)} µg/m³). Worst around ${hh(a.dirtiestHour)} (${Math.round(a.dirtiestPm)}).`;
+}
+const items=(arr,fn)=>(arr||[]).map(fn).join('');
+const imp=t=>t?`<div class="impact">${esc(t)}</div>`:'';
+function renderPlan(p){
+  $('#routine').innerHTML=items(p.routine,x=>`<div class="item"><div class="t">${esc(x.when)}: ${esc(x.action)}</div><div>${esc(x.why)}</div>${imp(x.impact)}</div>`);
+  $('#indoor').innerHTML=items(p.indoor,x=>`<div class="item"><div class="t">${esc(x.hack)} <span class="tag">(${esc(x.cost)})</span></div><div>${esc(x.why)}</div>${imp(x.impact)}</div>`);
+  $('#swaps').innerHTML=items(p.swaps,x=>`<div class="item"><div class="t">Instead of ${esc(x.instead_of)}, try ${esc(x.try)}</div>${imp(x.impact)}</div>`);
+  $('#protect').innerHTML=items(p.protect,x=>`<li>${esc(x)}</li>`);
+  $('#community').innerHTML=items(p.community,x=>`<li>${esc(x)}</li>`);
+  ctx=`${air.city}, AQI ${air.aqi}, PM2.5 ${Math.round(air.pm2_5)}. Cleanest ${hh(air.cleanestHour)}, worst ${hh(air.dirtiestHour)}. ${p.headline}`;
+}
+async function run(query){
+  $('#err').textContent='';const btn=$('.go');btn.disabled=true;btn.textContent='Building…';
+  try{
+    air=await getJSON('/api/air?'+query);renderAir(air);
+    const fd=new FormData($('#f'));const profile={};
+    ['kids','elderly','respiratory','pregnant'].forEach(k=>profile[k]=fd.has(k));
+    ['commute','heating','cooking','purifier'].forEach(k=>profile[k]=fd.get(k));
+    const r=await getJSON('/api/plan',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({air,profile})});
+    renderPlan(r.plan);
+    $('#src').textContent=r.source==='gemini'?'Plan written by Gemini for your household.':'Plan from built-in rules (Gemini key not set on the server).';
+    $('#out').style.display='block';$('#hero').scrollIntoView({behavior:'smooth'});
+  }catch(e){$('#err').textContent=e.message}
+  btn.disabled=false;btn.textContent='Build my plan';
+}
+$('#f').addEventListener('submit',e=>{e.preventDefault();run('city='+encodeURIComponent($('#city').value.trim()))});
+$('#geo').onclick=()=>navigator.geolocation?navigator.geolocation.getCurrentPosition(p=>run(`lat=${p.coords.latitude}&lon=${p.coords.longitude}`),()=>{$('#err').textContent='Location blocked. Type your city instead.'}):($('#err').textContent='Location is not supported. Type your city instead.');
+$('#ask').onclick=async()=>{const q=$('#q').value.trim();if(!q)return;$('#ans').textContent='Thinking…';
+  try{const r=await getJSON('/api/ask',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({question:q,context:ctx})});$('#ans').textContent=r.answer}catch(e){$('#ans').textContent=e.message}};
+</script></body></html>
