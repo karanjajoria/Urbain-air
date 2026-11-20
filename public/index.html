@@ -46,7 +46,7 @@ summary{cursor:pointer;font-weight:700;min-height:32px}
 [role=tab][aria-selected=true]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
 .item{display:flex;gap:12px;padding:14px 0;border-top:1px solid var(--line)}
 .item:first-child{border-top:0}
-.item input{min-height:0;width:26px;height:26px;margin-top:2px;flex:none;accent-color:var(--ink)}
+.item input[type=checkbox]{appearance:auto;-webkit-appearance:checkbox;padding:0;margin:2px 0 0;width:28px;height:28px;min-height:0;flex:none;accent-color:var(--ink);cursor:pointer;background:none}.item.done{background:color-mix(in srgb,var(--band) 14%,transparent);border-radius:10px}.item{padding-left:6px;padding-right:6px}.upd{display:flex;gap:10px;align-items:center;margin-top:8px;font-size:14px;color:var(--mute)}.upd button{min-height:36px;padding:4px 12px;font-size:14px}
 .item .t{font-weight:700}
 .item.done .t{text-decoration:line-through;opacity:.6}
 .impact{margin-top:6px;padding:8px 12px;border-radius:8px;background:var(--haze);font-size:16px}
@@ -61,120 +61,130 @@ ul.plain{margin:0;padding-left:20px}ul.plain li{margin:8px 0}
 @media(prefers-reduced-motion:no-preference){.busy .skel{animation:p 1s infinite alternate}@keyframes p{to{opacity:.2}}}
 @media(max-width:520px){.stats{grid-template-columns:repeat(2,1fr)}}
 </style></head><body><main>
-<h1>What is your air asking of you today?</h1>
-<p class="lead">Type your city. Get a simple plan for your family, and see what each choice does.</p>
-
+<h1 data-i18n="h1"></h1>
+<p class="lead" data-i18n="lead"></p>
 <form id="f">
- <div class="row"><input id="city" type="text" placeholder="Your city, e.g. Delhi" aria-label="Your city" autocomplete="address-level2">
-  <button type="button" id="geo">Use my location</button>
-  <select id="lang" aria-label="Plan language"><option value="en">English</option><option value="hi">हिन्दी</option></select></div>
- <details class="card" id="pers" open><summary>Personalise for your household (optional)</summary>
-  <p class="tag">Who is at home?</p>
+ <div class="row"><input id="city" type="text" data-i18n-ph="cityph" aria-label="City" autocomplete="address-level2">
+  <button type="button" id="geo" data-i18n="geo"></button>
+  <select id="lang" aria-label="Language / भाषा"><option value="en">English</option><option value="hi">हिन्दी</option></select></div>
+ <details class="card" id="pers" open><summary data-i18n="pers"></summary>
+  <p class="tag" data-i18n="who"></p>
   <div class="row">
-   <label class="chk"><input type="checkbox" name="kids">Children</label>
-   <label class="chk"><input type="checkbox" name="elderly">Older adults</label>
-   <label class="chk"><input type="checkbox" name="respiratory">Asthma or lung condition</label>
-   <label class="chk"><input type="checkbox" name="pregnant">Pregnancy</label></div>
+   <label class="chk"><input type="checkbox" name="kids"><span data-i18n="kids"></span></label>
+   <label class="chk"><input type="checkbox" name="elderly"><span data-i18n="elderly"></span></label>
+   <label class="chk"><input type="checkbox" name="respiratory"><span data-i18n="resp"></span></label>
+   <label class="chk"><input type="checkbox" name="pregnant"><span data-i18n="preg"></span></label></div>
   <div class="row">
-   <label class="f">How do you travel?<select name="commute"><option>two-wheeler</option><option>car</option><option>public transit</option><option>walk or cycle</option><option>work from home</option></select></label>
-   <label class="f">How do you stay warm?<select name="heating"><option>electric</option><option>wood, coal or charcoal</option><option>gas</option><option>none</option></select></label>
-   <label class="f">How do you cook?<select name="cooking"><option>LPG</option><option>induction</option><option>wood or biomass</option></select></label>
-   <label class="f">Air purifier at home?<select name="purifier"><option value="none">No</option><option value="yes">Yes</option></select></label></div>
+   <label class="f"><span data-i18n="commute"></span><select name="commute"><option value="two-wheeler" data-i18n="o1"></option><option value="car" data-i18n="o2"></option><option value="public transit" data-i18n="o3"></option><option value="walk or cycle" data-i18n="o4"></option><option value="work from home" data-i18n="o5"></option></select></label>
+   <label class="f"><span data-i18n="heating"></span><select name="heating"><option value="electric" data-i18n="h1o"></option><option value="wood, coal or charcoal" data-i18n="h2o"></option><option value="gas" data-i18n="h3o"></option><option value="none" data-i18n="h4o"></option></select></label>
+   <label class="f"><span data-i18n="cooking"></span><select name="cooking"><option value="LPG" data-i18n="k1"></option><option value="induction" data-i18n="k2"></option><option value="wood or biomass" data-i18n="k3"></option></select></label>
+   <label class="f"><span data-i18n="purif"></span><select name="purifier"><option value="none" data-i18n="no"></option><option value="yes" data-i18n="yes"></option></select></label></div>
  </details>
- <div class="row" style="margin:14px 0 0"><button class="go" type="submit" id="go">Show my plan</button></div>
+ <div class="row" style="margin:14px 0 0"><button class="go" type="submit" id="go" data-i18n="go"></button></div>
  <div id="err" class="err" role="alert"></div>
 </form>
 <div class="skel" aria-hidden="true"></div>
-
 <section id="out" aria-live="polite">
  <div class="verdict" id="verdict"></div>
- <div class="card" style="margin-top:14px"><b>Best time to go out</b>
-  <div id="chart" aria-hidden="true"></div><div id="axis" aria-hidden="true"></div>
-  <div class="meta" id="win"></div></div>
-
- <div class="bar"><b>Your plan</b><div class="prog" aria-hidden="true"><i id="pbar"></i></div><span id="ptxt" class="tag"></span>
-  <button id="share" type="button">Share with family</button></div>
- <div role="tablist" aria-label="Plan sections">
-  <button role="tab" id="t0" aria-selected="true" aria-controls="p">Today</button>
-  <button role="tab" id="t1" aria-selected="false" aria-controls="p">At home</button>
-  <button role="tab" id="t2" aria-selected="false" aria-controls="p">Swaps</button>
-  <button role="tab" id="t3" aria-selected="false" aria-controls="p">Protect</button></div>
+ <div class="card" style="margin-top:14px"><b data-i18n="best"></b>
+  <div id="chart" aria-hidden="true"></div><div id="axis" aria-hidden="true"></div><div class="meta" id="win"></div></div>
+ <div class="bar"><b data-i18n="yourplan"></b><div class="prog" aria-hidden="true"><i id="pbar"></i></div><span id="ptxt" class="tag"></span>
+  <button id="share" type="button" data-i18n="share"></button></div>
+ <div role="tablist">
+  <button role="tab" id="t0" aria-selected="true" aria-controls="p" data-i18n="tab0"></button>
+  <button role="tab" id="t1" aria-selected="false" aria-controls="p" data-i18n="tab1"></button>
+  <button role="tab" id="t2" aria-selected="false" aria-controls="p" data-i18n="tab2"></button>
+  <button role="tab" id="t3" aria-selected="false" aria-controls="p" data-i18n="tab3"></button></div>
  <div class="card" id="p" role="tabpanel"></div>
-
- <h2 style="font-size:20px;margin:26px 0 8px">Ask a question</h2>
+ <h2 style="font-size:20px;margin:26px 0 8px" data-i18n="askh"></h2>
  <div class="card"><div class="chips" id="chips"></div>
-  <div class="row"><input id="q" type="text" style="flex:1;min-width:180px" placeholder="Type your question" aria-label="Question"><button id="ask" class="go" type="button">Ask</button></div><div id="ans" role="status"></div></div>
- <details class="card" style="margin-top:18px"><summary>How this works</summary>
-  <p class="tag">Air readings come from Open-Meteo (US AQI scale, so numbers can differ from Indian CPCB figures). Advice is written by Google Gemini from your readings and answers, and checked against built-in safety rules. The cigarette comparison is a rough guide, not a medical measure. Read the <a href="/research.md">research behind this app</a>.</p></details>
- <p class="tag" id="src"></p>
- <p class="tag">General guidance, not medical advice. If anyone has trouble breathing, chest pain or worsening symptoms, see a doctor.</p>
+  <div class="row"><input id="q" type="text" style="flex:1;min-width:180px" data-i18n-ph="qph" aria-label="Question"><button id="ask" class="go" type="button" data-i18n="askb"></button></div><div id="ans" role="status"></div></div>
+ <details class="card" style="margin-top:18px"><summary data-i18n="how"></summary><p class="tag" data-i18n="howt"></p></details>
+ <p class="tag" id="src"></p><p class="tag" data-i18n="disc"></p>
 </section></main>
 <script>
 const $=s=>document.querySelector(s);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const bands=[[50,'#5f9e68','Good','Air is clean. Enjoy time outdoors.'],[100,'#9a8a1c','Okay','Fine for most people. Sensitive people take care.'],[150,'#c9741a','Limit time outside','Children, older adults and people with lung conditions should stay in.'],[200,'#c8472f','Avoid outdoor exercise','Wear an N95 mask if you must go out.'],[300,'#8a3a6b','Stay indoors','Keep windows closed and use a clean-air room.'],[1e9,'#6b2036','Health emergency','Stay indoors in a sealed room. Avoid all outdoor activity.']];
-const band=a=>bands.find(b=>a<=b[0]);
-const hh=t=>t?t.slice(11,16):'';
-let air=null,plan=null,tab=0,ctx='';
-const store={get(k){try{return localStorage.getItem(k)}catch{return null}},set(k,v){try{localStorage.setItem(k,v)}catch{}}};
-async function getJSON(u,o){const r=await fetch(u,o);const j=await r.json();if(!r.ok)throw new Error(j.error||'Something went wrong. Try again.');return j}
+const T={en:{h1:'What is your air asking of you today?',lead:'Type your city. Get a simple plan for your family, and see what each choice does.',cityph:'Your city, e.g. Delhi',geo:'Use my location',pers:'Personalise for your household (optional)',who:'Who is at home?',kids:'Children',elderly:'Older adults',resp:'Asthma or lung condition',preg:'Pregnancy',commute:'How do you travel?',o1:'Two-wheeler',o2:'Car',o3:'Public transit',o4:'Walk or cycle',o5:'Work from home',heating:'How do you stay warm?',h1o:'Electric heater',h2o:'Wood, coal or charcoal',h3o:'Gas',h4o:'Nothing',cooking:'How do you cook?',k1:'LPG',k2:'Induction',k3:'Wood or biomass',purif:'Air purifier at home?',no:'No',yes:'Yes',go:'Show my plan',busy:'Getting live air data…',best:'Best time to go out',yourplan:'Your plan',share:'Share with family',copied:'Copied',tab0:'Today',tab1:'At home',tab2:'Swaps',tab3:'Protect',askh:'Ask a question',qph:'Type your question',askb:'Ask',think:'Thinking…',c1:'Can my child play outside today?',c2:'Is it safe to open windows?',c3:'Which mask should I buy?',how:'How this works',howt:'Air readings come from Open-Meteo (US AQI scale, so numbers can differ from Indian CPCB figures). Advice is written by Google Gemini from your readings and answers, with built-in safety rules as a backup. The cigarette comparison is a rough guide, not a medical measure. <a href="/research.md">Read the research behind this app</a>.',disc:'General guidance, not medical advice. If anyone has trouble breathing, chest pain or worsening symptoms, see a doctor.',srcg:'Plan written by Gemini for your household.',srcr:'Plan from built-in safety rules (Gemini is not connected).',now:'right now',ac:'Air score (AQI)',pm:'Fine dust PM2.5',pc:'Coarse dust PM10',no2:'Traffic gas NO₂',cig:'Breathing this air all day is roughly like smoking {x} cigarette(s) (rough guide).',win:'Cleanest around {a} (outlined bar). Worst around {b}.',eff:'What it does:',why:'Why?',inst:'Instead of {a}, try {b}',pd:'{d} of {t} done',alldone:'All done for today. Well done!',prot:'Protect the most vulnerable',nb:'With your neighbours',upd:'Updated {x}',ref:'Refresh',needc:'Type your city name, or use your location.',locb:'Location is blocked. Type your city instead.',locn:'Location is not available. Type your city instead.',fail:'Something went wrong. Try again.',today:'Today',shb:'Cleanest time to go out:',
+ b:['Good','Okay','Limit time outside','Avoid outdoor exercise','Stay indoors','Health emergency'],bt:['Air is clean. Enjoy time outdoors.','Fine for most people. Sensitive people take care.','Children, older adults and people with lung conditions should stay in.','Wear an N95 mask if you must go out.','Keep windows closed and use a clean-air room.','Stay in a sealed room. Avoid all outdoor activity.']},
+hi:{h1:'आज आपकी हवा आपसे क्या कह रही है?',lead:'अपना शहर लिखें। अपने परिवार के लिए आसान योजना पाएँ और देखें कि हर कदम का क्या असर होता है।',cityph:'आपका शहर, जैसे दिल्ली',geo:'मेरी लोकेशन इस्तेमाल करें',pers:'अपने परिवार के हिसाब से बनाएँ (वैकल्पिक)',who:'घर में कौन है?',kids:'बच्चे',elderly:'बुज़ुर्ग',resp:'दमा या फेफड़ों की बीमारी',preg:'गर्भावस्था',commute:'आप कैसे सफ़र करते हैं?',o1:'दोपहिया',o2:'कार',o3:'सार्वजनिक परिवहन',o4:'पैदल या साइकिल',o5:'घर से काम',heating:'आप गर्मी कैसे लेते हैं?',h1o:'बिजली का हीटर',h2o:'लकड़ी, कोयला या चारकोल',h3o:'गैस',h4o:'कुछ नहीं',cooking:'आप खाना कैसे पकाते हैं?',k1:'एलपीजी',k2:'इंडक्शन',k3:'लकड़ी या बायोमास',purif:'घर में एयर प्यूरीफ़ायर?',no:'नहीं',yes:'हाँ',go:'मेरी योजना दिखाएँ',busy:'हवा का लाइव डेटा आ रहा है…',best:'बाहर जाने का सबसे अच्छा समय',yourplan:'आपकी योजना',share:'परिवार को भेजें',copied:'कॉपी हो गया',tab0:'आज',tab1:'घर में',tab2:'बदलाव',tab3:'सुरक्षा',askh:'सवाल पूछें',qph:'अपना सवाल लिखें',askb:'पूछें',think:'सोच रहा हूँ…',c1:'क्या मेरा बच्चा आज बाहर खेल सकता है?',c2:'क्या खिड़कियाँ खोलना सुरक्षित है?',c3:'कौन सा मास्क खरीदूँ?',how:'यह कैसे काम करता है',howt:'हवा के आँकड़े Open-Meteo से आते हैं (US AQI पैमाना, इसलिए भारत के CPCB आँकड़ों से अलग हो सकते हैं)। सलाह Google Gemini आपके आँकड़ों और जवाबों से लिखता है, और बैकअप के रूप में सुरक्षा नियम मौजूद हैं। सिगरेट की तुलना सिर्फ़ मोटा अंदाज़ा है, चिकित्सकीय माप नहीं। <a href="/research.md">इस ऐप के पीछे का शोध पढ़ें</a>।',disc:'यह सामान्य जानकारी है, चिकित्सकीय सलाह नहीं। साँस लेने में तकलीफ़, सीने में दर्द या बिगड़ते लक्षण हों तो डॉक्टर को दिखाएँ।',srcg:'योजना Gemini ने आपके परिवार के लिए लिखी है।',srcr:'योजना बिल्ट-इन सुरक्षा नियमों से बनी है (Gemini जुड़ा नहीं है)।',now:'अभी',ac:'वायु स्कोर (AQI)',pm:'महीन धूल PM2.5',pc:'मोटी धूल PM10',no2:'ट्रैफ़िक गैस NO₂',cig:'पूरे दिन इस हवा में साँस लेना लगभग {x} सिगरेट पीने जितना है (मोटा अंदाज़ा)।',win:'सबसे साफ़ लगभग {a} (घेरे वाली पट्टी)। सबसे ख़राब लगभग {b}।',eff:'इसका असर:',why:'क्यों?',inst:'{a} की जगह {b} आज़माएँ',pd:'{t} में से {d} पूरे',alldone:'आज के सारे काम पूरे। शाबाश!',prot:'सबसे संवेदनशील लोगों की रक्षा',nb:'पड़ोसियों के साथ',upd:'अपडेट: {x}',ref:'रीफ़्रेश',needc:'अपने शहर का नाम लिखें, या लोकेशन इस्तेमाल करें।',locb:'लोकेशन बंद है। अपना शहर लिखें।',locn:'लोकेशन उपलब्ध नहीं है। अपना शहर लिखें।',fail:'कुछ गड़बड़ हुई। फिर कोशिश करें।',today:'आज',shb:'बाहर जाने का सबसे साफ़ समय:',
+ b:['अच्छी','ठीक-ठाक','बाहर कम रहें','बाहर कसरत न करें','घर के अंदर रहें','स्वास्थ्य आपात स्थिति'],bt:['हवा साफ़ है। बाहर समय बिताएँ।','ज़्यादातर लोगों के लिए ठीक है। संवेदनशील लोग ध्यान रखें।','बच्चे, बुज़ुर्ग और फेफड़ों के मरीज़ घर में रहें।','बाहर जाना ही पड़े तो N95 मास्क पहनें।','खिड़कियाँ बंद रखें और साफ़-हवा वाले कमरे में रहें।','बंद कमरे में रहें। बाहर की कोई गतिविधि न करें।']}};
+const store={m:{},get(k){if(k in this.m)return this.m[k];try{return localStorage.getItem(k)}catch{return null}},set(k,v){this.m[k]=v;try{localStorage.setItem(k,v)}catch{}}};
+let lang=store.get('lang')||((navigator.language||'').startsWith('hi')?'hi':'en');
+const t=(k,o)=>{let s=T[lang][k]??T.en[k]??k;if(o)for(const x in o)s=s.replace('{'+x+'}',o[x]);return s};
+const cols=['#5f9e68','#9a8a1c','#c9741a','#c8472f','#8a3a6b','#6b2036'],lim=[50,100,150,200,300,1e9];
+const bi=a=>lim.findIndex(l=>a<=l);
+const hh=x=>x?x.slice(11,16):'';
+let air=null,plan=null,tab=0,ctx='',last='',src='',upd='';
+async function getJSON(u,o){const r=await fetch(u,o);const j=await r.json();if(!r.ok)throw new Error(j.error||t('fail'));return j}
 
-function renderAir(a){
-  const [,col,title,tip]=band(a.aqi);document.documentElement.style.setProperty('--band',col);
+function applyLang(){
+  document.documentElement.lang=lang;$('#lang').value=lang;store.set('lang',lang);
+  document.querySelectorAll('[data-i18n]').forEach(e=>e.innerHTML=t(e.dataset.i18n));
+  document.querySelectorAll('[data-i18n-ph]').forEach(e=>e.placeholder=t(e.dataset.i18nPh));
+  if(air){renderAir();renderChips();$('#src').textContent=t(src);}
+  if(plan){renderTab();progress()}
+  if(!$('#go').disabled)$('#go').textContent=t('go');
+}
+function renderAir(){
+  const a=air,i=bi(a.aqi);document.documentElement.style.setProperty('--band',cols[i]);
   const cig=a.pm2_5/22,n=Math.min(10,Math.ceil(cig));let c='';
-  for(let i=0;i<n;i++)c+=`<div class="cig" style="--f:${Math.max(0,Math.min(1,cig-i))*100}%"></div>`;
-  $('#verdict').innerHTML=`<div class="city">${esc(a.city)} right now</div><div class="v">${title}</div><div>${tip}</div>
-   <div class="cigs" aria-hidden="true">${c}</div>
-   <div class="meta">Breathing this air all day is roughly like smoking ${cig.toFixed(1)} cigarette${cig>=1.5?'s':''} (rough guide).</div>
-   <div class="stats"><div><b>${a.aqi}</b>Air score (AQI)</div><div><b>${Math.round(a.pm2_5)}</b>Fine dust PM2.5</div><div><b>${Math.round(a.pm10)}</b>Coarse dust PM10</div><div><b>${Math.round(a.no2)}</b>Traffic gas NO₂</div></div>`;
+  for(let k=0;k<n;k++)c+=`<div class="cig" style="--f:${Math.max(0,Math.min(1,cig-k))*100}%"></div>`;
+  $('#verdict').innerHTML=`<div class="city">${esc(a.city)} ${t('now')}</div><div class="v">${t('b')[i]}</div><div>${t('bt')[i]}</div>
+   <div class="cigs" aria-hidden="true">${c}</div><div class="meta">${t('cig',{x:cig.toFixed(1)})}</div>
+   <div class="stats"><div><b>${a.aqi}</b>${t('ac')}</div><div><b>${Math.round(a.pm2_5)}</b>${t('pm')}</div><div><b>${Math.round(a.pm10)}</b>${t('pc')}</div><div><b>${Math.round(a.no2)}</b>${t('no2')}</div></div>
+   <div class="upd">${t('upd',{x:upd})} <button type="button" id="refresh">${t('ref')}</button></div>`;
+  $('#refresh').onclick=()=>run(last);
   const mx=Math.max(...a.forecast.map(h=>h.pm));
   $('#chart').innerHTML=a.forecast.map(h=>`<i class="${h.t===a.cleanestHour?'best':''}" style="height:${h.pm/mx*100}%"></i>`).join('');
-  $('#axis').innerHTML=[0,6,12,18,23].filter(i=>a.forecast[i]).map(i=>`<span>${hh(a.forecast[i].t)}</span>`).join('');
-  $('#win').textContent=`Cleanest around ${hh(a.cleanestHour)} (outlined bar). Worst around ${hh(a.dirtiestHour)}.`;
+  $('#axis').innerHTML=[0,6,12,18,23].filter(k=>a.forecast[k]).map(k=>`<span>${hh(a.forecast[k].t)}</span>`).join('');
+  $('#win').textContent=t('win',{a:hh(a.cleanestHour),b:hh(a.dirtiestHour)});
 }
+function renderChips(){$('#chips').innerHTML=['c1','c2','c3'].map(k=>`<button type="button">${t(k)}</button>`).join('');
+  $('#chips').querySelectorAll('button').forEach(b=>b.onclick=()=>{$('#q').value=b.textContent;$('#ask').click()})}
 const sections=()=>[
- {k:'r',items:(plan.routine||[]).map(x=>({t:`${x.when}: ${x.action}`,e:x.impact,w:x.why}))},
- {k:'i',items:(plan.indoor||[]).map(x=>({t:`${x.hack} (${x.cost})`,e:x.impact,w:x.why}))},
- {k:'s',items:(plan.swaps||[]).map(x=>({t:`Instead of ${x.instead_of}, try ${x.try}`,e:x.impact}))}];
-const doneKey=t=>'done:'+new Date().toDateString()+':'+t;
-function progress(){let tot=0,d=0;sections().forEach(s=>s.items.forEach(i=>{tot++;if(store.get(doneKey(i.t)))d++}));
-  $('#pbar').style.width=(tot?d/tot*100:0)+'%';$('#ptxt').textContent=`${d} of ${tot} done`}
+ (plan.routine||[]).map(x=>({t:`${x.when}: ${x.action}`,e:x.impact,w:x.why})),
+ (plan.indoor||[]).map(x=>({t:`${x.hack} (${x.cost})`,e:x.impact,w:x.why})),
+ (plan.swaps||[]).map(x=>({t:t('inst',{a:x.instead_of,b:x.try}),e:x.impact}))];
+const dk=x=>'done:'+new Date().toDateString()+':'+x;
+function progress(){let tot=0,d=0;sections().forEach(s=>s.forEach(i=>{tot++;if(store.get(dk(i.t)))d++}));
+  $('#pbar').style.width=(tot?d/tot*100:0)+'%';$('#ptxt').textContent=tot&&d===tot?t('alldone'):t('pd',{d,t:tot})}
 function renderTab(){
   document.querySelectorAll('[role=tab]').forEach((b,i)=>{b.setAttribute('aria-selected',i===tab);b.tabIndex=i===tab?0:-1});
   const p=$('#p');p.setAttribute('aria-labelledby','t'+tab);
   if(tab<3){
-    const s=sections()[tab];
-    p.innerHTML=s.items.map((i,n)=>`<div class="item${store.get(doneKey(i.t))?' done':''}"><input type="checkbox" id="c${n}" ${store.get(doneKey(i.t))?'checked':''} data-t="${esc(i.t)}" aria-label="Mark done"><div><label for="c${n}" class="t">${esc(i.t)}</label>${i.e?`<div class="impact"><b>What it does:</b> ${esc(i.e)}</div>`:''}${i.w?`<details><summary>Why?</summary>${esc(i.w)}</details>`:''}</div></div>`).join('');
-    p.querySelectorAll('input').forEach(c=>c.onchange=()=>{store.set(doneKey(c.dataset.t),c.checked?'1':'');c.closest('.item').classList.toggle('done',c.checked);progress()});
-  }else{
-    p.innerHTML=`<b>Protect the most vulnerable</b><ul class="plain">${(plan.protect||[]).map(x=>`<li>${esc(x)}</li>`).join('')}</ul><p></p><b>With your neighbours</b><ul class="plain">${(plan.community||[]).map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`;
-  }
+    p.innerHTML=sections()[tab].map((i,n)=>{const d=store.get(dk(i.t));return `<div class="item${d?' done':''}"><input type="checkbox" id="c${n}" ${d?'checked':''} data-k="${esc(dk(i.t))}"><div><label for="c${n}" class="t">${esc(i.t)}</label>${i.e?`<div class="impact"><b>${t('eff')}</b> ${esc(i.e)}</div>`:''}${i.w?`<details><summary>${t('why')}</summary>${esc(i.w)}</details>`:''}</div></div>`}).join('');
+    p.querySelectorAll('input').forEach(c=>c.onchange=()=>{store.set(c.dataset.k,c.checked?'1':'');c.closest('.item').classList.toggle('done',c.checked);progress()});
+  }else p.innerHTML=`<b>${t('prot')}</b><ul class="plain">${(plan.protect||[]).map(x=>`<li>${esc(x)}</li>`).join('')}</ul><p></p><b>${t('nb')}</b><ul class="plain">${(plan.community||[]).map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`;
 }
 document.querySelectorAll('[role=tab]').forEach((b,i)=>{b.onclick=()=>{tab=i;renderTab()};b.onkeydown=e=>{if(e.key==='ArrowRight'||e.key==='ArrowLeft'){tab=(tab+(e.key==='ArrowRight'?1:3))%4;renderTab();$('#t'+tab).focus()}}});
 
+async function loadPlan(){
+  const fd=new FormData($('#f')),profile={};
+  ['kids','elderly','respiratory','pregnant'].forEach(k=>profile[k]=fd.has(k));
+  ['commute','heating','cooking','purifier'].forEach(k=>profile[k]=fd.get(k));
+  const r=await getJSON('/api/plan',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({air,profile,lang})});
+  plan=r.plan;src=r.source==='gemini'?'srcg':'srcr';$('#src').textContent=t(src);
+  ctx=`${air.city}, AQI ${air.aqi}, PM2.5 ${Math.round(air.pm2_5)}. Cleanest ${hh(air.cleanestHour)}, worst ${hh(air.dirtiestHour)}. ${plan.headline||''}`;
+  renderTab();progress();
+}
 async function run(query){
-  $('#err').textContent='';$('#go').disabled=true;$('#go').textContent='Getting live air data…';document.body.classList.add('busy');
+  last=query;$('#err').textContent='';$('#go').disabled=true;$('#go').textContent=t('busy');document.body.classList.add('busy');
   try{
-    air=await getJSON('/api/air?'+query);renderAir(air);
-    const fd=new FormData($('#f')),profile={};
-    ['kids','elderly','respiratory','pregnant'].forEach(k=>profile[k]=fd.has(k));
-    ['commute','heating','cooking','purifier'].forEach(k=>profile[k]=fd.get(k));
-    const r=await getJSON('/api/plan',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({air,profile,lang:$('#lang').value})});
-    plan=r.plan;tab=0;renderTab();progress();
-    ctx=`${air.city}, AQI ${air.aqi}, PM2.5 ${Math.round(air.pm2_5)}. Cleanest ${hh(air.cleanestHour)}, worst ${hh(air.dirtiestHour)}. ${plan.headline||''}`;
-    $('#chips').innerHTML=['Can my child play outside today?','Is it safe to open windows?','Which mask should I buy?'].map(q=>`<button type="button">${q}</button>`).join('');
-    $('#chips').querySelectorAll('button').forEach(b=>b.onclick=()=>{$('#q').value=b.textContent;$('#ask').click()});
-    $('#src').textContent=r.source==='gemini'?'Plan written by Gemini for your household.':'Plan from built-in safety rules (Gemini is not connected).';
+    air=await getJSON('/api/air?'+query);upd=new Date().toTimeString().slice(0,5);renderAir();renderChips();
+    await loadPlan();
     $('#out').style.display='block';$('#pers').open=false;store.set('city',$('#city').value);$('#verdict').scrollIntoView({behavior:'smooth'});
   }catch(e){$('#err').textContent=e.message}
-  document.body.classList.remove('busy');$('#go').disabled=false;$('#go').textContent='Show my plan';
+  document.body.classList.remove('busy');$('#go').disabled=false;$('#go').textContent=t('go');
 }
-$('#f').addEventListener('submit',e=>{e.preventDefault();const c=$('#city').value.trim();if(!c){$('#err').textContent='Type your city name, or use your location.';$('#city').focus();return}run('city='+encodeURIComponent(c))});
-$('#geo').onclick=()=>navigator.geolocation?navigator.geolocation.getCurrentPosition(p=>run(`lat=${p.coords.latitude}&lon=${p.coords.longitude}`),()=>{$('#err').textContent='Location is blocked. Type your city instead.'}):($('#err').textContent='Location is not available. Type your city instead.');
-$('#ask').onclick=async()=>{const q=$('#q').value.trim();if(!q)return;$('#ans').textContent='Thinking…';
-  try{const r=await getJSON('/api/ask',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({question:q,context:ctx,lang:$('#lang').value})});$('#ans').textContent=r.answer}catch(e){$('#ans').textContent=e.message}};
+$('#f').addEventListener('submit',e=>{e.preventDefault();const c=$('#city').value.trim();if(!c){$('#err').textContent=t('needc');$('#city').focus();return}run('city='+encodeURIComponent(c))});
+$('#geo').onclick=()=>navigator.geolocation?navigator.geolocation.getCurrentPosition(p=>run(`lat=${p.coords.latitude}&lon=${p.coords.longitude}`),()=>{$('#err').textContent=t('locb')}):($('#err').textContent=t('locn'));
+$('#lang').onchange=async e=>{lang=e.target.value;applyLang();if(air){$('#go').disabled=true;document.body.classList.add('busy');try{await loadPlan()}catch(x){$('#err').textContent=x.message}document.body.classList.remove('busy');$('#go').disabled=false}};
+$('#ask').onclick=async()=>{const q=$('#q').value.trim();if(!q)return;$('#ans').textContent=t('think');
+  try{const r=await getJSON('/api/ask',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({question:q,context:ctx,lang})});$('#ans').textContent=r.answer}catch(e){$('#ans').textContent=e.message}};
 $('#share').onclick=async()=>{
-  const text=`Air in ${air.city}: ${band(air.aqi)[2]} (AQI ${air.aqi}). Cleanest time to go out: ${hh(air.cleanestHour)}.\nToday:\n`+(plan.routine||[]).slice(0,3).map(x=>`- ${x.action}`).join('\n');
-  try{if(navigator.share)await navigator.share({text});else{await navigator.clipboard.writeText(text);$('#share').textContent='Copied'}}catch{}};
+  const text=`${air.city}: ${t('b')[bi(air.aqi)]} (AQI ${air.aqi}). ${t('shb')} ${hh(air.cleanestHour)}.\n${t('today')}:\n`+(plan.routine||[]).slice(0,3).map(x=>`- ${x.action}`).join('\n');
+  try{if(navigator.share)await navigator.share({text});else{await navigator.clipboard.writeText(text);$('#share').textContent=t('copied')}}catch{}};
 const sc=store.get('city');if(sc)$('#city').value=sc;
+applyLang();
 </script></body></html>

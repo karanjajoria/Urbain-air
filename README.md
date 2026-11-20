@@ -9,8 +9,6 @@ Falls back to built-in rules if no Gemini key is set, so the demo never breaks.
 - Google Fonts
 - Open-Meteo air quality + geocoding (free, no key). Google's Air Quality API needs a billing account, so it is not used.
 
-> Deployed web application: https://urbain-air.onrender.com/
-
 Research and design rationale: see RESEARCH.md (also served at /research.md).
 
 ## Run locally
