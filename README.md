@@ -2,7 +2,15 @@
 
 Winter smog makes families ask the same questions every morning: can my child play outside, when should I go out, should I open a window? An AQI number does not answer those. This app takes the live air reading for your city, asks a few things about your household, and gives you a short plan for the day. Every suggestion says what it actually changes, so you can decide if it is worth doing.
 
+<<<<<<< HEAD
 Built for PromptWars, Challenge 6.
+=======
+## Stack (all free)
+- Gemini API (Google AI Studio free key): https://aistudio.google.com/apikey
+- Render (free plan) for hosting
+- Google Fonts
+- Open-Meteo air quality + geocoding (free, no key). Google's Air Quality API needs a billing account, so it is not used.
+>>>>>>> 1406ebcfd493f8fa0737aca1225f6b7c948c447c
 
 ## What it does
 - Pulls live AQI, PM2.5, PM10 and NO₂ for a city (or your location) and finds the cleanest hour in the next day.
@@ -38,6 +46,7 @@ The tests cover input cleaning, the forecast logic, the backup plan in both lang
 
 **Google Cloud Run:**
 
+<<<<<<< HEAD
     gcloud run deploy urban-air --source . --region asia-south1 --allow-unauthenticated \
       --min-instances 0 --set-env-vars GEMINI_API_KEY=your_key
 
@@ -54,3 +63,7 @@ Gemini writes the plans and answers inside the app. I also used Claude (Anthropi
 
 ## Research
 The reasoning behind the advice and the interface is in [RESEARCH.md](RESEARCH.md).
+=======
+##Deployed: Render 
+    https://urbain-air.onrender.com/
+>>>>>>> 1406ebcfd493f8fa0737aca1225f6b7c948c447c
