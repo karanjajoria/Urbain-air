@@ -1,6 +1,6 @@
 # Research behind the Urban Air Assistant
 
-This note explains why the app gives the advice it does and why it looks and behaves the way it does. Each claim is tied to a source in the reference list. The authors and venues are given so you can look the papers up; please confirm exact titles and DOIs before citing them in a formal submission.
+I wrote this note to show where the app's advice and design choices come from. Each claim points to a source in the reference list. I checked the box-fan filter studies directly; for the rest, please look up the exact titles and DOIs before citing them formally.
 
 ## 1. The problem
 - Air pollution is one of the largest preventable health risks worldwide. The Lancet Commission follow-up estimated about 9 million pollution-related deaths in 2019 (Fuller et al., 2022).
